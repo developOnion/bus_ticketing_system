@@ -9,6 +9,7 @@
 
 #include "global.h"
 
+// bus struct
 typedef struct Bus {
     char busID[MAX_ID_LEN];
     char name[MAX_NAME_LEN];
@@ -22,5 +23,6 @@ typedef struct Bus {
 void Bus_addBus();
 void Bus_deleteBus();
 void Bus_viewBuses();
+void Bus_editBusDepartureTime();
 
 #endif

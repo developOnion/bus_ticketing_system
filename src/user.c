@@ -7,7 +7,7 @@
 User User_register() {
     User newUser;
     do {
-        printf("Character allowed (A-Z a-z) (1-9) (a space)\n");
+        printf("Character allowed: A-Z | a-z | 1-9 | a space\n");
         printf("Enter username: ");
         scanf("%[^\n]c", newUser.username);
         Util_clearInputBuffer();
@@ -26,24 +26,22 @@ User User_register() {
     do {
         printf("\nPassword must have\n");
         printf("_ Minimum length 8\n");
-        printf("_ Combination of lowercase, uppercase, and digit.\n");
-        printf("_ Symbol is allowed but space is not allowed\n");
+        printf("_ Combination of lowercase, uppercase, numbers or symbols.\n");
         printf("Enter Password: ");
         scanf("%[^\n]c", newUser.password);
         Util_clearInputBuffer();
 
         if (!Validation_isValidPassword(newUser.password)) 
-            printf("\nInvalid password, Please try again.\n\n");
+            printf("\nInvalid password, Please try again.\n");
     } while (!Validation_isValidPassword(newUser.password));
 
     do {
-        printf("\nPhonenumber should start with 0\n");
         printf("Enter phonenumber: ");
         scanf("%[^\n]c", newUser.phoneNumber);
         Util_clearInputBuffer();
 
         if (!Validation_isValidPhonenumber(newUser.phoneNumber))
-            printf("\nInvalid phonenumber. Please try again.\n\n");
+            printf("\nInvalid phonenumber. Please try again.\n");
     } while (!Validation_isValidPhonenumber(newUser.phoneNumber));
 
     char previousId[MAX_ID_LEN];
@@ -83,7 +81,11 @@ User User_register() {
     fprintf(scanner_userFile, "\n%s,%s,%s,%s,%s", newUser.userID, newUser.username, newUser.password, newUser.phoneNumber, "0");
     fclose(scanner_userFile);
 
-    printf("New user added sucessfully.\n");
+    printf("\nUser added sucessfully.\n");
+    printf("UserID: %s\n", newUser.userID);
+    printf("Username: %s\n", newUser.username);
+    printf("Phone Number: %s\n", newUser.phoneNumber);
+
     return newUser;
 }
 
@@ -209,12 +211,12 @@ User User_login() {
     fclose(scanner_userFile);
 
     if (!foundUsername) {
-        printf("\nUsername does not exits.\n");
+        printf("\nUsername does not exits.");
         user.userID[0] = '\0';
         return user;
     }
     else if (!isCorrectPassword) {
-        printf("\nIncorrect password. Please try again.\n");
+        printf("\nIncorrect password.");
         user.userID[0] = '\0';
         return user;
     }
@@ -294,6 +296,4 @@ void User_showAvailableBuses() {
         printf("Total Seats: %d\n", availableBues[i].totalSeats);
         printf("Available Seats: %d\n", availableBues[i].availableSeats);
     }
-
-    printf("\n=========================================\n");
 }

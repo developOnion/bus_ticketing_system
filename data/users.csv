@@ -1,5 +1,5 @@
 userID,username,password,phonenumber,role
-A001,AdminUser,adminpass,1122334455,1
-A002,AdminUser2,adminpass2,2233445566,1
-U001,JohnDoe,password123,1234567890,0
-U002,JaneSmith,password456,0987654321,0
+A001,Admin1,Pass1234,081525959,1
+A002,Admin2,Pass1234,2233445566,1
+U001,User1,Pass1234,1234567890,0
+U002,smey1,Smey1234!,081525959,0

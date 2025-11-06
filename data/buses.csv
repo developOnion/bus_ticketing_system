@@ -1,6 +1,3 @@
 BusID,BusName,Route,DepartureTime,TotalSeats
-BUS001,City Express,City Center-Downtown,08:00,50
-BUS002,Metro Shuttle,Metro Station-Uptown,09:30,40
-BUS003,Suburban Line,Suburb-City Center,10:15,30
-BUS004,Coastal Cruiser,Beach-City Center,11:00,60
-BUS005,Mountain Explorer,Mountain Base-City Center,07:45,20
+BUS001,Hotel Bus,Phnom Penh-Svay,21:00,30
+BUS002,Luxury Hotel Bus,Phnom Penh-Battambang,21:30,30

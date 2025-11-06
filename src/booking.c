@@ -162,9 +162,8 @@ void Booking_viewMyBookings(User *currentUser) {
     if (!found) {
         printf("No bookings found for user %s.\n", currentUser->username);
     }
-
-    printf("\n=========================================\n");
 }
+
 void Booking_cancelBooking(User *currentUser) {
     char bookingID[MAX_ID_LEN];
     printf("Enter the Booking ID you want to cancel: ");
@@ -188,6 +187,7 @@ void Booking_cancelBooking(User *currentUser) {
     int found = 0;
     // Copy header
     fgets(line, sizeof(line), bookingFile);
+    fprintf(tempFile, "%s", line); // write header to temp file
 
     while (fgets(line, sizeof(line), bookingFile)) {
         char bID[MAX_ID_LEN], bUserID[MAX_ID_LEN];

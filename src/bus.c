@@ -179,52 +179,80 @@ void Bus_deleteBus() {
     printf("Bus with ID %s deleted successfully.\n", busID);
 }
 
-// bool Bus_loadBuses(Bus buses[], int max) {
-//     FILE *scanner_busesFile = fopen(BUSES_FILE, "r");
-//     if (scanner_busesFile == NULL) {
-//         printf("Error: Cannot load data.\n");
-//         return false;
-//     }
+void Bus_editBusDepartureTime() {
+    printf("Enter Bus ID to edit departure time: ");
+    char busID[MAX_ID_LEN];
+    scanf("%s", busID);
+    Util_clearInputBuffer();
 
-//     char line[MAX_LINE_LEN];
-//     int count = 0;
+    FILE *scanner_busesFile = fopen(BUSES_FILE, "r");
+    if (scanner_busesFile == NULL) {
+        printf("Error: Cannot load data.\n");
+        return;
+    }
 
-//     // skip heading line
-//     fgets(line, sizeof(line), scanner_busesFile);
+    FILE *tempFile = fopen("temp_buses.txt", "w");
+    if (tempFile == NULL) {
+        fclose(scanner_busesFile);
+        printf("Error: Cannot create temporary file.\n");
+        return;
+    }
 
-//     while (fgets(line, sizeof(line), scanner_busesFile) && count < max) {
-//         int parsed = sscanf(line, "%[^,],%[^,],%[^-]-%[^,],%[^,],%d", 
-//                buses[count].busID, buses[count].name, 
-//                buses[count].origin, buses[count].destination, 
-//                buses[count].departureTime, &buses[count].totalSeats);
-//         if (parsed != 6) {
-//             printf("Warning: Could not parse bus info: %s\n", line);
-//             continue;
-//         }
-//         count++;
-//     }
+    char line[MAX_LINE_LEN];
+    bool found = false;
 
-//     fclose(scanner_busesFile);
-//     return true;
-// }
+    fgets(line, sizeof(line), scanner_busesFile);
+    fprintf(tempFile, "%s", line);
 
-// bool Bus_saveAllBuses(Bus buses[], int count) {
-//     FILE *scanner_busesFile = fopen(BUSES_FILE, "w");
-//     if (scanner_busesFile == NULL) {
-//         printf("Error: Cannot save data.\n");
-//         return false;
-//     }
+    while (fgets(line, sizeof(line), scanner_busesFile)) {
+        char currentBusID[MAX_ID_LEN], departureTime[MAX_DEPARTURE_TIME_LEN], busName[MAX_NAME_LEN],
+             origin[MAX_LOCATION_LEN], destination[MAX_LOCATION_LEN];
+        int totalSeats;
+        int parsed = sscanf(line, "%[^,],%[^,],%[^-]-%[^,],%[^,],%d",
+            currentBusID, busName, origin, destination, departureTime, &totalSeats);
 
-//     fprintf(scanner_busesFile, "BusID,Name,Origin-Destination,DepartureTime,TotalSeats\n");
+        if (parsed != 6) {
+            printf("Warning: Could not parse bus info: %s\n", line);
+            remove("temp_buses.txt");
+            fclose(scanner_busesFile);
+            fclose(tempFile);
+            return;
+        }
 
-//     for (int i = 0; i < count; i++) {
-//         fprintf(scanner_busesFile, "%s,%s,%s-%s,%s,%d\n", 
-//                 buses[i].busID, buses[i].name, 
-//                 buses[i].origin, buses[i].destination, 
-//                 buses[i].departureTime, buses[i].totalSeats);
-//     }
+        if (strcmp(currentBusID, busID) == 0) {
+            found = true;
+            char newDepartureTime[MAX_DEPARTURE_TIME_LEN];
+            do {
+                printf("\nCurrent Departure Time: %s\n", departureTime);
+                printf("Enter New Departure Time (HH:MM)24 hours format: ");
+                scanf("%s", newDepartureTime);
+                Util_clearInputBuffer();
 
-//     fclose(scanner_busesFile);
-//     return true;
-// }
+                if (!Validation_isValidTimeFormat(newDepartureTime)) {
+                    printf("Invalid time format. Please use HH:MM format.\n");
+                }
+                else if (strcmp(newDepartureTime, departureTime) == 0) {
+                    printf("New departure time cannot be the same as the current one.\n");
+                }
+            } while (!Validation_isValidTimeFormat(newDepartureTime) || strcmp(newDepartureTime, departureTime) == 0);
 
+            fprintf(tempFile, "%s,%s,%s-%s,%s,%d\n", 
+                    currentBusID, busName, origin, destination, newDepartureTime, totalSeats);
+            printf("Departure time updated successfully for Bus ID %s.\n", busID);
+        } else {
+            fprintf(tempFile, "%s", line);
+        }
+    }
+
+    fclose(scanner_busesFile);
+    fclose(tempFile);
+
+    if (found) {
+        remove(BUSES_FILE);
+        rename("temp_buses.txt", BUSES_FILE);
+    } 
+    else {
+        remove("temp_buses.txt");
+        printf("Bus with ID %s not found.\n", busID);
+    }
+}

@@ -40,8 +40,9 @@ void Admin_manageBuses() {
         printf("\n========== Manage Buses ==========\n");
         printf("1. Add Bus\n");
         printf("2. Delete Bus\n");
-        printf("3. View All Buses\n");
-        printf("4. Back to Admin Menu\n");
+        printf("3. Edit Bus Departure Time\n");
+        printf("4. View All Buses\n");
+        printf("5. Back to Admin Menu\n");
         printf("Enter option: ");
         scanf("%d", &option);
         Util_clearInputBuffer();
@@ -54,14 +55,17 @@ void Admin_manageBuses() {
                 Bus_deleteBus();
                 break;
             case 3:
-                Bus_viewBuses();
+                Bus_editBusDepartureTime();
                 break;
             case 4:
-                return;
+                Bus_viewBuses();
+                break;
+            case 5:
+                return; // Back to Admin Menu
             default:
                 printf("Invalid option.\n");
         }
-    } while (option != 4);
+    } while (option != 5);
 }
 
 void Admin_viewAllBookings() {
@@ -106,8 +110,6 @@ void Admin_viewAllBookings() {
     if (!hasBookings) {
         printf("No bookings found.\n");
     }
-
-    printf("\n=========================================\n");
 }
 
 void Admin_Logout(User *currentUser) {

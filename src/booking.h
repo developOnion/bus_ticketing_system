@@ -6,6 +6,7 @@
 #include "bus.h"
 #include "user.h"
 
+// booking struct
 typedef struct Booking {
     char bookingID[MAX_ID_LEN];
     char userID[MAX_ID_LEN];
